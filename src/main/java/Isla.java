@@ -73,6 +73,23 @@ public class Isla {
                 break;
             }
 
+            case "delete": {
+                int targetIndex;
+                Task task;
+                try {
+                    targetIndex = Integer.parseInt(answerArray[1]) - 1;
+                    task = taskList.get(targetIndex);
+                    taskList.remove(targetIndex);
+                } catch (IndexOutOfBoundsException e) {
+                    throw new IslaException("Target index is out of bounds.");
+                } catch (NumberFormatException e) {
+                    throw new IslaException("Target index must be a number.");
+                }
+                System.out.println("Removed:");
+                System.out.println(task);
+                break;
+            }
+
             case "mark": {
                 Task task;
                 try {
