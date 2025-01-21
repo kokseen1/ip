@@ -12,42 +12,76 @@ public class Isla {
         System.out.println("Now you have " + taskList.size() + " task(s) in the list.");
     }
 
-    public static void handleParameters(String[] answerArray) {
+    public static void handleParameters(String[] answerArray) throws IslaException {
         String command = answerArray[0];
         switch (command) {
 
             case "todo": {
                 String description = String.join(" ", Arrays.copyOfRange(answerArray,
                         1, answerArray.length));
+                if (description.isEmpty()) {
+                    throw new IslaException("Description cannot be empty.");
+                }
                 addTask(new Todo(description));
                 break;
             }
 
             case "deadline": {
                 int byIndex = Arrays.asList(answerArray).indexOf("/by");
+                if (byIndex == -1) {
+                    throw new IslaException("Must specify /by.");
+                }
                 String description = String.join(" ", Arrays.copyOfRange(answerArray,
                         1, byIndex));
                 String by = String.join(" ", Arrays.copyOfRange(answerArray,
                         byIndex + 1, answerArray.length));
+                if (description.isEmpty()) {
+                    throw new IslaException("Description cannot be empty.");
+                }
+                if (by.isEmpty()) {
+                    throw new IslaException("Due by date cannot be empty.");
+                }
                 addTask(new Deadline(description, by));
                 break;
             }
 
             case "event": {
                 int fromIndex = Arrays.asList(answerArray).indexOf("/from");
+                if (fromIndex == -1) {
+                    throw new IslaException("Must specify /from.");
+                }
                 int toIndex = Arrays.asList(answerArray).indexOf("/to");
+                if (toIndex == -1) {
+                    throw new IslaException("Must specify /to.");
+                }
                 String description = String.join(" ", Arrays.copyOfRange(answerArray,
                         1, fromIndex));
                 String from = String.join(" ", Arrays.copyOfRange(answerArray,
                         fromIndex + 1, toIndex));
                 String to = String.join(" ", Arrays.copyOfRange(answerArray,
                         toIndex + 1, answerArray.length));
+                if (description.isEmpty()) {
+                    throw new IslaException("Description cannot be empty.");
+                }
+                if (from.isEmpty()) {
+                    throw new IslaException("From date cannot be empty.");
+                }
+                if (to.isEmpty()) {
+                    throw new IslaException("To date cannot be empty.");
+                }
                 addTask(new Event(description, from, to));
                 break;
             }
 
             case "mark": {
-                Task task = taskList.get(Integer.parseInt(answerArray[1]) - 1);
+                Task task;
+                try {
+                    task = taskList.get(Integer.parseInt(answerArray[1]) - 1);
+                } catch (NumberFormatException e) {
+                    throw new IslaException("Target index must be a number.");
+                } catch (IndexOutOfBoundsException e) {
+                    throw new IslaException("Target index is out of bounds.");
+                }
                 task.markAsDone();
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println(task);
@@ -55,7 +89,14 @@ public class Isla {
             }
 
             case "unmark": {
-                Task task = taskList.get(Integer.parseInt(answerArray[1]) - 1);
+                Task task;
+                try {
+                    task = taskList.get(Integer.parseInt(answerArray[1]) - 1);
+                } catch (NumberFormatException e) {
+                    throw new IslaException("Target index must be a number.");
+                } catch (IndexOutOfBoundsException e) {
+                    throw new IslaException("Target index is out of bounds.");
+                }
                 task.markAsNotDone();
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println(task);
@@ -63,7 +104,7 @@ public class Isla {
             }
 
             default:
-                break;
+                throw new IslaException("Unknown command.");
         }
     }
 
@@ -91,7 +132,11 @@ public class Isla {
 
                 default:
                     String[] answerArray = answer.split(" ");
-                    handleParameters(answerArray);
+                    try {
+                        handleParameters(answerArray);
+                    } catch (IslaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
             }
         }
