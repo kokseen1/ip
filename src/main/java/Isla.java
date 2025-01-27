@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -26,7 +28,13 @@ public class Isla {
                 newTask = new Todo(description);
                 break;
             case "D":
-                String by = taskComponents[3];
+                LocalDate by;
+                String byString = taskComponents[3];
+                try {
+                    by = LocalDate.parse(byString);
+                } catch (DateTimeParseException e) {
+                    throw new IslaException("Invalid date format.");
+                }
                 newTask = new Deadline(description, by);
                 break;
             case "E":
@@ -101,13 +109,19 @@ public class Isla {
                 }
                 String description = String.join(" ", Arrays.copyOfRange(answerArray,
                         1, byIndex));
-                String by = String.join(" ", Arrays.copyOfRange(answerArray,
+                String byString = String.join(" ", Arrays.copyOfRange(answerArray,
                         byIndex + 1, answerArray.length));
                 if (description.isEmpty()) {
                     throw new IslaException("Description cannot be empty.");
                 }
-                if (by.isEmpty()) {
+                if (byString.isEmpty()) {
                     throw new IslaException("Due by date cannot be empty.");
+                }
+                LocalDate by;
+                try {
+                    by = LocalDate.parse(byString);
+                } catch (DateTimeParseException e) {
+                    throw new IslaException("Could not parse date.");
                 }
                 addTask(new Deadline(description, by));
                 break;
@@ -201,6 +215,8 @@ public class Isla {
             loadList();
         } catch (IslaException e) {
             System.out.println(e.getMessage());
+            System.out.println("Could not load task list.");
+            System.exit(1);
         }
 
         System.out.println("Hello, I am Isla.\nWhat can I do for you?");
