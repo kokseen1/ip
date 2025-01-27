@@ -8,6 +8,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public String serialize() {
+        return "D|" + super.serialize() + "|" + this.by;
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + this.by + ")";
     }

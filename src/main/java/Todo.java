@@ -5,6 +5,11 @@ public class Todo extends Task {
     }
 
     @Override
+    public String serialize() {
+        return "T|" + super.serialize();
+    }
+
+    @Override
     public String toString() {
         return "[T]" + super.toString();
     }

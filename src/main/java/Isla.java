@@ -1,11 +1,79 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Isla {
     public static ArrayList<Task> taskList;
+    public static Path savePath = Paths.get("./data/isla.txt");
 
-    public static void addTask(Task task) {
+    public static Task deserialize(String serializedTask) throws IslaException {
+        String[] taskComponents = serializedTask.split("\\|");
+        String taskType = taskComponents[0];
+        boolean isDone = Boolean.parseBoolean(taskComponents[1]);
+        String description = taskComponents[2];
+
+        Task newTask;
+        switch (taskType) {
+            case "T":
+                newTask = new Todo(description);
+                break;
+            case "D":
+                String by = taskComponents[3];
+                newTask = new Deadline(description, by);
+                break;
+            case "E":
+                String from = taskComponents[3];
+                String to = taskComponents[4];
+                newTask = new Event(description, from, to);
+                break;
+            default:
+                throw new IslaException("Invalid task type: " + taskType);
+        }
+
+        if (isDone)
+            newTask.markAsDone();
+
+        return newTask;
+    }
+
+    public static void loadList() throws IslaException {
+        List<String> serializedList;
+
+        try {
+            serializedList = Files.readAllLines(savePath);
+        } catch (IOException e) {
+            throw new IslaException("Error when reading save file.");
+        }
+
+        for (String serializedTask : serializedList) {
+            try {
+                taskList.add(deserialize(serializedTask));
+            } catch (IslaException e) {
+                throw new IslaException("Error when deserializing save file.");
+            }
+        }
+    }
+
+    public static void saveList() throws IslaException {
+        List<String> serializedList = taskList.stream().map(Task::serialize).toList();
+
+        try {
+            Files.createDirectories(Paths.get("./data"));
+            Files.write(savePath, serializedList, UTF_8);
+        } catch (IOException e) {
+            throw new IslaException("Encountered error when saving.");
+        }
+    }
+
+    public static void addTask(Task task) throws IslaException {
         taskList.add(task);
         System.out.println("Got it. I've added this task:");
         System.out.println(task);
@@ -123,11 +191,17 @@ public class Isla {
             default:
                 throw new IslaException("Unknown command.");
         }
+        saveList();
     }
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         taskList = new ArrayList<>();
+        try {
+            loadList();
+        } catch (IslaException e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println("Hello, I am Isla.\nWhat can I do for you?");
 
