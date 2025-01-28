@@ -5,6 +5,9 @@ import isla.Parser;
 import isla.Storage;
 import isla.task.TaskList;
 
+/**
+ * Isla class to handle main execution of the chatbot.
+ */
 public class Isla {
     private Storage storage;
     private TaskList tasks;
@@ -21,6 +24,9 @@ public class Isla {
         }
     }
 
+    /**
+     * Starts the chatbot.
+     */
     public void run() {
         boolean isExit = false;
         ui.showGreeting();

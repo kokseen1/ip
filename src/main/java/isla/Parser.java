@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
+/**
+ * Parser class to handle parsing and execution of user commands.
+ */
 public class Parser {
     public static int parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
         switch (command) {
