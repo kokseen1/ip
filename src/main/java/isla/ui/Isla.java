@@ -23,14 +23,15 @@ public class Isla {
 
     public void run() {
         boolean isExit = false;
-        ui.greet();
+        ui.showGreeting();
 
         while (!isExit) {
             String command = ui.readCommand();
 
             try {
-                if (Parser.parseAndExecute(command, tasks, ui, storage) == 1)
+                if (Parser.parseAndExecute(command, tasks, ui, storage) == 1) {
                     isExit = true;
+                }
             } catch (IslaException e) {
                 System.out.println(e.getMessage());
             } finally {

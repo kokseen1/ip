@@ -9,12 +9,12 @@ public class Ui {
         input = new Scanner(System.in);
     }
 
-    public void greet() {
+    public void showGreeting() {
         System.out.println("Hello, I am isla.ui.Isla.");
         System.out.println("What can I do for you?");
     }
 
-    public void farewell() {
+    public void showFarewell() {
         System.out.println("Bye. Hope to see you again.");
     }
 
