@@ -1,6 +1,10 @@
 package isla;
 
-import isla.task.*;
+import isla.task.Deadline;
+import isla.task.Event;
+import isla.task.Task;
+import isla.task.TaskList;
+import isla.task.Todo;
 import isla.ui.Ui;
 
 import java.time.LocalDate;
@@ -11,7 +15,7 @@ public class Parser {
     public static int parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
         switch (command) {
             case "bye":
-                ui.farewell();
+                ui.showFarewell();
                 return 1;
 
             case "list":

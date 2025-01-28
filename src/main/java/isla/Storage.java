@@ -14,21 +14,21 @@ public class Storage {
     }
 
     public List<String> load() throws IslaException {
-        List<String> serializedList;
+        List<String> serializedTasks;
 
         try {
-            serializedList = Files.readAllLines(savePath);
+            serializedTasks = Files.readAllLines(savePath);
         } catch (IOException e) {
             throw new IslaException("Error when reading save file.");
         }
 
-        return serializedList;
+        return serializedTasks;
     }
 
-    public void save(List<String> serializedList) throws IslaException {
+    public void save(List<String> serializedTasks) throws IslaException {
         try {
             Files.createDirectories(savePath.getParent());
-            Files.write(savePath, serializedList);
+            Files.write(savePath, serializedTasks);
         } catch (IOException e) {
             throw new IslaException("Error when saving.");
         }
