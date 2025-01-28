@@ -164,6 +164,18 @@ public class Parser {
             break;
         }
 
+        case "find": {
+            String keyword = String.join(" ", Arrays.copyOfRange(commandArray,
+                    1, commandArray.length));
+
+            if (keyword.isEmpty()) {
+                throw new IslaException("Keyword cannot be empty.");
+            }
+
+            tasks.find(keyword).enumerate();
+            break;
+        }
+
         default:
             throw new IslaException("Unknown command.");
         }

@@ -6,12 +6,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskList {
     private ArrayList<Task> tasks;
 
     public TaskList() {
         tasks = new ArrayList<>();
+    }
+
+    public TaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
     }
 
     public TaskList(List<String> serializedList) throws IslaException {
@@ -101,5 +106,10 @@ public class TaskList {
 
     public Integer getSize() {
         return tasks.size();
+    }
+
+    public TaskList find(String keyword) {
+        return new TaskList((ArrayList<Task>) taskList.stream().filter(task -> task.description.toLowerCase()
+                .contains(keyword.toLowerCase())).collect(Collectors.toList()));
     }
 }
