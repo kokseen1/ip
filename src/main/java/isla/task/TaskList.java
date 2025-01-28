@@ -50,29 +50,29 @@ public class TaskList {
         Task newTask;
 
         switch (taskType) {
-            case "T":
-                newTask = new Todo(description);
-                break;
+        case "T":
+            newTask = new Todo(description);
+            break;
 
-            case "D":
-                LocalDate by;
-                String byString = taskComponents[3];
-                try {
-                    by = LocalDate.parse(byString);
-                } catch (DateTimeParseException e) {
-                    throw new IslaException("Invalid date format.");
-                }
-                newTask = new Deadline(description, by);
-                break;
+        case "D":
+            LocalDate by;
+            String byString = taskComponents[3];
+            try {
+                by = LocalDate.parse(byString);
+            } catch (DateTimeParseException e) {
+                throw new IslaException("Invalid date format.");
+            }
+            newTask = new Deadline(description, by);
+            break;
 
-            case "E":
-                String from = taskComponents[3];
-                String to = taskComponents[4];
-                newTask = new Event(description, from, to);
-                break;
+        case "E":
+            String from = taskComponents[3];
+            String to = taskComponents[4];
+            newTask = new Event(description, from, to);
+            break;
 
-            default:
-                throw new IslaException("Invalid task type: " + taskType);
+        default:
+            throw new IslaException("Invalid task type: " + taskType);
         }
 
         if (isDone)
