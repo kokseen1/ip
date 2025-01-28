@@ -6,6 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Storage class to handle saving and loading of tasks to disk.
+ */
 public class Storage {
     private Path savePath;
 
@@ -13,6 +16,12 @@ public class Storage {
         savePath = Paths.get(filePath);
     }
 
+    /**
+     * Reads the save file and returns the serialized task list.
+     *
+     * @return List of serialized tasks.
+     * @throws IslaException If IOException is encountered when reading.
+     */
     public List<String> load() throws IslaException {
         List<String> serializedList;
 
@@ -25,6 +34,12 @@ public class Storage {
         return serializedList;
     }
 
+    /**
+     * Writes the given list of serialized tasks to the save file.
+     *
+     * @param serializedList List of serialized tasks to save.
+     * @throws IslaException If IOException is encountered when saving.
+     */
     public void save(List<String> serializedList) throws IslaException {
         try {
             Files.createDirectories(savePath.getParent());

@@ -1,5 +1,8 @@
 package isla.task;
 
+/**
+ * Task class to represent an abstract task.
+ */
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -9,18 +12,32 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    /**
+     * Returns the appropriate status icon of the task.
+     *
+     * @return 'X' if task is done, ' ' otherwise.
+     */
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    /**
+     * Marks the task as done.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks the task as not done.
+     */
     public void markAsNotDone() {
         this.isDone = false;
     }
 
+    /**
+     * Returns the serialized task as a String.
+     */
     public String serialize() {
         return this.isDone + "|" + this.description;
     }
