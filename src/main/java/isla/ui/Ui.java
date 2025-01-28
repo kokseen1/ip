@@ -1,3 +1,5 @@
+package isla.ui;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -8,7 +10,7 @@ public class Ui {
     }
 
     public void greet() {
-        System.out.println("Hello, I am Isla.");
+        System.out.println("Hello, I am isla.ui.Isla.");
         System.out.println("What can I do for you?");
     }
 
