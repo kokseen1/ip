@@ -6,12 +6,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskList {
     private ArrayList<Task> taskList;
 
     public TaskList() {
         taskList = new ArrayList<>();
+    }
+
+    public TaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
     }
 
     public TaskList(List<String> serializedList) throws IslaException {
@@ -50,29 +55,29 @@ public class TaskList {
         Task newTask;
 
         switch (taskType) {
-            case "T":
-                newTask = new Todo(description);
-                break;
+        case "T":
+            newTask = new Todo(description);
+            break;
 
-            case "D":
-                LocalDate by;
-                String byString = taskComponents[3];
-                try {
-                    by = LocalDate.parse(byString);
-                } catch (DateTimeParseException e) {
-                    throw new IslaException("Invalid date format.");
-                }
-                newTask = new Deadline(description, by);
-                break;
+        case "D":
+            LocalDate by;
+            String byString = taskComponents[3];
+            try {
+                by = LocalDate.parse(byString);
+            } catch (DateTimeParseException e) {
+                throw new IslaException("Invalid date format.");
+            }
+            newTask = new Deadline(description, by);
+            break;
 
-            case "E":
-                String from = taskComponents[3];
-                String to = taskComponents[4];
-                newTask = new Event(description, from, to);
-                break;
+        case "E":
+            String from = taskComponents[3];
+            String to = taskComponents[4];
+            newTask = new Event(description, from, to);
+            break;
 
-            default:
-                throw new IslaException("Invalid task type: " + taskType);
+        default:
+            throw new IslaException("Invalid task type: " + taskType);
         }
 
         if (isDone)
@@ -100,5 +105,10 @@ public class TaskList {
 
     public Integer size() {
         return taskList.size();
+    }
+
+    public TaskList find(String keyword) {
+        return new TaskList((ArrayList<Task>) taskList.stream().filter(task -> task.description.toLowerCase()
+                .contains(keyword.toLowerCase())).collect(Collectors.toList()));
     }
 }
