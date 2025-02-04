@@ -15,8 +15,8 @@ public class TaskList {
         tasks = new ArrayList<>();
     }
 
-    public TaskList(ArrayList<Task> taskList) {
-        this.taskList = taskList;
+    public TaskList(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public TaskList(List<String> serializedList) throws IslaException {
@@ -109,7 +109,7 @@ public class TaskList {
     }
 
     public TaskList find(String keyword) {
-        return new TaskList((ArrayList<Task>) taskList.stream().filter(task -> task.description.toLowerCase()
+        return new TaskList((ArrayList<Task>) tasks.stream().filter(task -> task.description.toLowerCase()
                 .contains(keyword.toLowerCase())).collect(Collectors.toList()));
     }
 }
