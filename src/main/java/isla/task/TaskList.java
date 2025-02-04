@@ -1,15 +1,18 @@
 package isla.task;
 
-import isla.IslaException;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import isla.IslaException;
+
+/**
+ * TaskList class to represent a list of task objects.
+ */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     public TaskList() {
         tasks = new ArrayList<>();
@@ -19,6 +22,10 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    /**
+     * Constructs a new TaskList with an existing List of serialized tasks.
+     * @throws IslaException If error is encountered when deserializing.
+     */
     public TaskList(List<String> serializedList) throws IslaException {
         tasks = new ArrayList<>();
         for (String serializedTask : serializedList) {
@@ -34,6 +41,9 @@ public class TaskList {
         }
     }
 
+    /**
+     * Enumerates and prints all the tasks in the list.
+     */
     public void enumerate() {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -42,10 +52,22 @@ public class TaskList {
         }
     }
 
+    /**
+     * Serialize the tasks in the list to a String array suitable for saving to file.
+     *
+     * @return List of serialized tasks.
+     */
     public List<String> serialize() {
         return tasks.stream().map(Task::serialize).toList();
     }
 
+    /**
+     * Deserialize a task from a serialized String back to a Task.
+     *
+     * @param serializedTask Serialized task String to be deserialized.
+     * @return The deserialized task.
+     * @throws IslaException If error is encountered when deserializing.
+     */
     public Task deserialize(String serializedTask) throws IslaException {
         String[] taskComponents = serializedTask.split("\\|");
         String taskType = taskComponents[0];
@@ -91,13 +113,19 @@ public class TaskList {
         return tasks.get(taskId - 1);
     }
 
+    /**
+     * Adds a new task to the task list.
+     */
     public void addTask(Task task) {
         tasks.add(task);
         System.out.println("Got it. I've added this task:");
         System.out.println(task);
-        System.out.println("Now you have " + tasks.size() + " task(s) in the list.");
+        System.out.println("Now you have " + this.getSize() + " task(s) in the list.");
     }
 
+    /**
+     * Deletes the task at the given index.
+     */
     public Task deleteTask(Integer taskId) {
         Task task = tasks.get(taskId - 1);
         tasks.remove(taskId - 1);
@@ -108,6 +136,9 @@ public class TaskList {
         return tasks.size();
     }
 
+    /**
+     * Returns a TaskList with tasks matching the given keyword String.
+     */
     public TaskList find(String keyword) {
         return new TaskList((ArrayList<Task>) tasks.stream().filter(task -> task.description.toLowerCase()
                 .contains(keyword.toLowerCase())).collect(Collectors.toList()));

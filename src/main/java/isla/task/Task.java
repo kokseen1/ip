@@ -7,6 +7,9 @@ public abstract class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Constructs a new Task with the given description.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;

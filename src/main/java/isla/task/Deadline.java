@@ -3,9 +3,15 @@ package isla.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Deadline class to represent a deadline task.
+ */
 public class Deadline extends Task {
     protected LocalDate by;
 
+    /**
+     * Constructs a new Deadline object with a description and `by` field.
+     */
     public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;

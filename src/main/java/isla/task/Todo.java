@@ -1,5 +1,8 @@
 package isla.task;
 
+/**
+ * Class to represent a To-do task object.
+ */
 public class Todo extends Task {
     public Todo(String description) {
         super(description);

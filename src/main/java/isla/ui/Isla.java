@@ -13,6 +13,10 @@ public class Isla {
     private TaskList tasks;
     private Ui ui;
 
+
+    /**
+     * Constructor to initialize the chatbot.
+     */
     public Isla(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);

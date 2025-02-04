@@ -1,9 +1,15 @@
 package isla.task;
 
+/**
+ * Event class to represent an event task.
+ */
 public class Event extends Task {
     protected String from;
     protected String to;
 
+    /**
+     * Constructs a new Event object with a description and `from` and `to` fields.
+     */
     public Event(String description, String from, String to) {
         super(description);
         this.from = from;

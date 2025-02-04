@@ -1,5 +1,9 @@
 package isla;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+
 import isla.task.Deadline;
 import isla.task.Event;
 import isla.task.Task;
@@ -7,14 +11,20 @@ import isla.task.TaskList;
 import isla.task.Todo;
 import isla.ui.Ui;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-
 /**
  * Parser class to handle parsing and execution of user commands.
  */
 public class Parser {
+
+    /**
+     * Parse a given command and executes the desired action.
+     *
+     * @param command Command string input
+     * @param tasks Current TaskList object
+     * @param ui Current Ui object
+     * @param storage Current Storage object
+     * @throws IslaException If error is encountered when processing the command.
+     */
     public static int parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
         switch (command) {
         case "bye":
@@ -33,6 +43,15 @@ public class Parser {
         return 0;
     }
 
+    /**
+     * Handle advanced commands with multiple parameters.
+     *
+     * @param commandArray String array of whitespace-split command.
+     * @param tasks Current TaskList object
+     * @param ui Current Ui object
+     * @param storage Current Storage object
+     * @throws IslaException If error is encountered when processing the command.
+     */
     public static void handleParameters(String[] commandArray, TaskList tasks, Ui ui, Storage storage) throws
             IslaException {
         String action = commandArray[0];
