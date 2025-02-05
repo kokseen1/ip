@@ -24,7 +24,7 @@ public class MainWindow extends AnchorPane {
     private Isla isla;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaIsla.png"));
+    private Image islaImage = new Image(this.getClass().getResourceAsStream("/images/DaIsla.png"));
 
     @FXML
     public void initialize() {
@@ -32,7 +32,7 @@ public class MainWindow extends AnchorPane {
     }
 
     /** Injects the Isla instance */
-    public void setDuke(Isla d) {
+    public void setIsla(Isla d) {
         isla = d;
     }
 
@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
         }
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getIslaDialog(response, islaImage)
         );
         userInput.clear();
     }

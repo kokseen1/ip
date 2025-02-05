@@ -25,7 +25,7 @@ public class Main extends Application {
             stage.setMinHeight(220);
             stage.setMinWidth(417);
             stage.setMaxWidth(417); // Add this if you didn't automatically resize elements
-            fxmlLoader.<MainWindow>getController().setDuke(isla); // inject the Isla instance
+            fxmlLoader.<MainWindow>getController().setIsla(isla); // inject the Isla instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
