@@ -25,22 +25,17 @@ public class Parser {
      * @param storage Current Storage object
      * @throws IslaException If error is encountered when processing the command.
      */
-    public static int parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
+    public static String parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
         switch (command) {
         case "bye":
-            ui.showFarewell();
-            return 1;
+            return ui.getFarewell();
 
         case "list":
-            tasks.enumerate();
-            break;
+            return tasks.enumerate();
 
         default:
-            handleParameters(command.split(" "), tasks, ui, storage);
-            break;
+            return handleParameters(command.split(" "), tasks, ui, storage);
         }
-
-        return 0;
     }
 
     /**
@@ -52,9 +47,10 @@ public class Parser {
      * @param storage Current Storage object
      * @throws IslaException If error is encountered when processing the command.
      */
-    public static void handleParameters(String[] commandArray, TaskList tasks, Ui ui, Storage storage) throws
+    public static String handleParameters(String[] commandArray, TaskList tasks, Ui ui, Storage storage) throws
             IslaException {
         String action = commandArray[0];
+        String response;
 
         switch (action) {
         case "todo": {
@@ -65,7 +61,7 @@ public class Parser {
                 throw new IslaException("Description cannot be empty.");
             }
 
-            tasks.addTask(new Todo(description));
+            response = tasks.addTask(new Todo(description));
             break;
         }
 
@@ -94,7 +90,7 @@ public class Parser {
                 throw new IslaException("Could not parse date.");
             }
 
-            tasks.addTask(new Deadline(description, by));
+            response = tasks.addTask(new Deadline(description, by));
             break;
         }
 
@@ -127,7 +123,7 @@ public class Parser {
                 throw new IslaException("To date cannot be empty.");
             }
 
-            tasks.addTask(new Event(description, from, to));
+            response = tasks.addTask(new Event(description, from, to));
             break;
         }
 
@@ -142,8 +138,7 @@ public class Parser {
                 throw new IslaException("Target index must be a number.");
             }
 
-            System.out.println("Removed:");
-            System.out.println(task);
+            response = "Removed: " + task;
             break;
         }
 
@@ -160,8 +155,7 @@ public class Parser {
 
             task.markAsDone();
 
-            System.out.println("Nice! I've marked this task as done:");
-            System.out.println(task);
+            response = "Nice! I've marked this task as done:" + task;
             break;
         }
 
@@ -178,8 +172,7 @@ public class Parser {
 
             task.markAsNotDone();
 
-            System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println(task);
+            response = "OK, I've marked this task as not done yet:" + task;
             break;
         }
 
@@ -191,7 +184,7 @@ public class Parser {
                 throw new IslaException("Keyword cannot be empty.");
             }
 
-            tasks.find(keyword).enumerate();
+            response = tasks.find(keyword).enumerate();
             break;
         }
 
@@ -200,5 +193,6 @@ public class Parser {
         }
 
         storage.save(tasks.serialize());
+        return response;
     }
 }

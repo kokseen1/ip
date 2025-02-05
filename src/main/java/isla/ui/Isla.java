@@ -9,10 +9,11 @@ import isla.task.TaskList;
  * Isla class to handle main execution of the chatbot.
  */
 public class Isla {
+    private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
+
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
-
 
     /**
      * Constructor to initialize the chatbot.
@@ -28,29 +29,17 @@ public class Isla {
         }
     }
 
-    /**
-     * Starts the chatbot.
-     */
-    public void run() {
-        boolean isExit = false;
-        ui.showGreeting();
-
-        while (!isExit) {
-            String command = ui.readCommand();
-
-            try {
-                if (Parser.parseAndExecute(command, tasks, ui, storage) == 1) {
-                    isExit = true;
-                }
-            } catch (IslaException e) {
-                System.out.println(e.getMessage());
-            } finally {
-                ui.showLine();
-            }
-        }
+    public Isla() {
+        this(DEFAULT_FILE_PATH);
     }
 
-    public static void main(String[] args) {
-        new Isla("./data/tasks.txt").run();
+    public String getResponse(String command) {
+        String response;
+        try {
+            response = Parser.parseAndExecute(command, tasks, ui, storage);
+        } catch (IslaException e) {
+            response = e.getMessage();
+        }
+        return response;
     }
 }

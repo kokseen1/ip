@@ -44,12 +44,14 @@ public class TaskList {
     /**
      * Enumerates and prints all the tasks in the list.
      */
-    public void enumerate() {
-        System.out.println("Here are the tasks in your list:");
+    public String enumerate() {
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
-            System.out.println(i + 1 + "." + task);
+            lines.add(i + 1 + "." + task);
         }
+        return String.join("\n", lines);
     }
 
     /**
@@ -116,11 +118,13 @@ public class TaskList {
     /**
      * Adds a new task to the task list.
      */
-    public void addTask(Task task) {
+    public String addTask(Task task) {
+        ArrayList<String> lines = new ArrayList<>();
         tasks.add(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println(task);
-        System.out.println("Now you have " + this.getSize() + " task(s) in the list.");
+        lines.add("Got it. I've added this task:");
+        lines.add(String.valueOf(task));
+        lines.add("Now you have " + this.getSize() + " task(s) in the list.");
+        return String.join("\n", lines);
     }
 
     /**

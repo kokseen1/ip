@@ -21,10 +21,10 @@ public class Ui {
     }
 
     /**
-     * Prints the default farewell message of the chatbot.
+     * Returns the default farewell message of the chatbot.
      */
-    public void showFarewell() {
-        System.out.println("Bye. Hope to see you again.");
+    public static String getFarewell() {
+        return "Bye. Hope to see you again.";
     }
 
     /**
@@ -35,10 +35,10 @@ public class Ui {
     }
 
     /**
-     * Prints the chat delimiter message.
+     * Returns the chat delimiter message.
      */
-    public void showLine() {
-        System.out.println("____________________________");
+    public String getLine() {
+        return "____________________________";
     }
 
     /**
