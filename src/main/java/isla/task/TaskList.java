@@ -144,7 +144,8 @@ public class TaskList {
      * Returns a TaskList with tasks matching the given keyword String.
      */
     public TaskList find(String keyword) {
-        return new TaskList((ArrayList<Task>) tasks.stream().filter(task -> task.description.toLowerCase()
-                .contains(keyword.toLowerCase())).collect(Collectors.toList()));
+        return new TaskList((ArrayList<Task>) tasks.stream()
+                .filter(task -> task.description.toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList()));
     }
 }
