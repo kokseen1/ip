@@ -15,7 +15,7 @@ public class Ui {
     /**
      * Prints the default greeting message of the chatbot.
      */
-    public void showGreeting() {
+    public void showGreetingMessage() {
         System.out.println("Hello, I am isla.ui.Isla.");
         System.out.println("What can I do for you?");
     }
@@ -23,21 +23,21 @@ public class Ui {
     /**
      * Returns the default farewell message of the chatbot.
      */
-    public static String getFarewell() {
+    public static String getFarewellMessage() {
         return "Bye. Hope to see you again.";
     }
 
     /**
      * Reads the command input from the user and returns it.
      */
-    public String readCommand() {
+    public String readNextCommand() {
         return input.nextLine();
     }
 
     /**
      * Returns the chat delimiter message.
      */
-    public String getLine() {
+    public String getChatDelimiter() {
         return "____________________________";
     }
 

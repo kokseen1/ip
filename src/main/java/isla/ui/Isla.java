@@ -11,9 +11,9 @@ import isla.task.TaskList;
 public class Isla {
     private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
 
-    private Storage storage;
+    private final Storage storage;
+    private final Ui ui;
     private TaskList tasks;
-    private Ui ui;
 
     /**
      * Constructor to initialize the chatbot.
@@ -36,7 +36,7 @@ public class Isla {
     public String getResponse(String command) {
         String response;
         try {
-            response = Parser.parseAndExecute(command, tasks, ui, storage);
+            response = Parser.executeAndGetResponse(command, tasks, ui, storage);
         } catch (IslaException e) {
             response = e.getMessage();
         }
