@@ -50,6 +50,7 @@ public class Parser {
     public static String handleParameters(String[] commandArray, TaskList tasks, Ui ui, Storage storage) throws
             IslaException {
         String action = commandArray[0];
+        assert !action.isEmpty();
         String response;
 
         switch (action) {
@@ -138,6 +139,7 @@ public class Parser {
                 throw new IslaException("Target index must be a number.");
             }
 
+            assert task != null;
             response = "Removed: " + task;
             break;
         }
@@ -153,6 +155,7 @@ public class Parser {
                 throw new IslaException("Target index must be a number.");
             }
 
+            assert task != null;
             task.markAsDone();
 
             response = "Nice! I've marked this task as done:" + task;
@@ -170,6 +173,7 @@ public class Parser {
                 throw new IslaException("Target index must be a number.");
             }
 
+            assert task != null;
             task.markAsNotDone();
 
             response = "OK, I've marked this task as not done yet:" + task;
@@ -193,6 +197,7 @@ public class Parser {
         }
 
         storage.save(tasks.serialize());
+        assert response != null;
         return response;
     }
 }
