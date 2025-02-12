@@ -37,6 +37,9 @@ public class Parser {
         case "list":
             return tasks.enumerate();
 
+        case "help":
+            return Ui.getHelpMessage();
+
         default:
             return handleParameterizedCommand(commandArray, tasks, ui, storage);
         }
