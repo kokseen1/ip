@@ -23,18 +23,22 @@ public class Parser {
      * @param tasks Current TaskList object
      * @param ui Current Ui object
      * @param storage Current Storage object
+     * @return The response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
-    public static String parseAndExecute(String command, TaskList tasks, Ui ui, Storage storage) throws IslaException {
-        switch (command) {
+    public static String executeAndGetResponse(String command, TaskList tasks, Ui ui, Storage storage) throws
+            IslaException {
+        String[] commandArray = command.split(" ");
+        String action = commandArray[0];
+        switch (action) {
         case "bye":
-            return ui.getFarewell();
+            return Ui.getFarewellMessage();
 
         case "list":
             return tasks.enumerate();
 
         default:
-            return handleParameters(command.split(" "), tasks, ui, storage);
+            return handleParameterizedCommand(commandArray, tasks, ui, storage);
         }
     }
 
@@ -45,10 +49,11 @@ public class Parser {
      * @param tasks Current TaskList object
      * @param ui Current Ui object
      * @param storage Current Storage object
+     * @return The response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
-    public static String handleParameters(String[] commandArray, TaskList tasks, Ui ui, Storage storage) throws
-            IslaException {
+    private static String handleParameterizedCommand(String[] commandArray, TaskList tasks, Ui ui, Storage storage)
+            throws IslaException {
         String action = commandArray[0];
         assert !action.isEmpty();
         String response;

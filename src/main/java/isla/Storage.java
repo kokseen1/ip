@@ -10,7 +10,7 @@ import java.util.List;
  * Storage class to handle saving and loading of tasks to disk.
  */
 public class Storage {
-    private Path savePath;
+    private final Path savePath;
 
     public Storage(String filePath) {
         savePath = Paths.get(filePath);
