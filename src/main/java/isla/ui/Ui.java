@@ -30,8 +30,7 @@ public class Ui {
      */
     public static String getGreetingMessage() {
         return "Hello, I am Isla.\n"
-                + "What can I do for you?\n"
-                + HELP_MESSAGE;
+                + "What can I do for you?";
     }
 
     /**
