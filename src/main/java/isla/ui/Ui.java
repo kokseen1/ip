@@ -1,32 +1,25 @@
 package isla.ui;
 
-import java.util.Scanner;
-
 /**
  * Ui class to handle interactions with the user.
  */
 public class Ui {
     private static final String HELP_MESSAGE = "Available Commands:\n"
-                                               + "list : list all tasks.\n"
-                                               + "help : show help message.\n"
-                                               + "bye : exit the application.\n"
-                                               + "\n"
-                                               + "todo [desc] : create a Todo with a description.\n"
-                                               + "deadline [desc] /by [YYYY-MM-DD] : create a Deadline with a description and a deadline.\n"
-                                               + "event [desc] /from [date] /to [date] : create an Event with a description and a date range.\n"
-                                               + "\n"
-                                               + "mark [task no.] : mark a Task as completed.\n"
-                                               + "unmark [task no.] : unmark a Task as not completed.\n"
-                                               + "\n"
-                                               + "find [keyword] : search for a task with a matching description.\n";
-    private Scanner input;
-
-    public Ui() {
-        input = new Scanner(System.in);
-    }
+            + "list : list all tasks.\n"
+            + "help : show help message.\n"
+            + "bye : exit the application.\n"
+            + "\n"
+            + "todo [desc] : create a Todo with a description.\n"
+            + "deadline [desc] /by [YYYY-MM-DD] : create a Deadline with a description and a deadline.\n"
+            + "event [desc] /from [date] /to [date] : create an Event with a description and a date range.\n"
+            + "\n"
+            + "mark [task no.] : mark a Task as completed.\n"
+            + "unmark [task no.] : unmark a Task as not completed.\n"
+            + "\n"
+            + "find [keyword] : search for a task with a matching description.\n";
 
     /**
-     * Prints the default greeting message of the chatbot.
+     * Returns the default greeting message of the chatbot.
      */
     public static String getGreetingMessage() {
         return "Hello, I am Isla.\n"
@@ -45,21 +38,6 @@ public class Ui {
      */
     public static String getHelpMessage() {
         return HELP_MESSAGE;
-    }
-
-
-    /**
-     * Reads the command input from the user and returns it.
-     */
-    public String readNextCommand() {
-        return input.nextLine();
-    }
-
-    /**
-     * Returns the chat delimiter message.
-     */
-    public String getChatDelimiter() {
-        return "____________________________";
     }
 
     /**

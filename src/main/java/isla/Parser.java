@@ -17,7 +17,7 @@ import isla.ui.Ui;
 public class Parser {
 
     /**
-     * Parse a given command and executes the desired action.
+     * Parses a given command and executes the desired action.
      *
      * @param command Command string input
      * @param tasks Current TaskList object
@@ -46,7 +46,7 @@ public class Parser {
     }
 
     /**
-     * Handle advanced commands with multiple parameters.
+     * Handles advanced commands with multiple parameters.
      *
      * @param commandArray String array of whitespace-split command.
      * @param tasks Current TaskList object

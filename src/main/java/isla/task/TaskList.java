@@ -55,7 +55,7 @@ public class TaskList {
     }
 
     /**
-     * Serialize the tasks in the list to a String array suitable for saving to file.
+     * Serializes the tasks in the list to a String array suitable for saving to file.
      *
      * @return List of serialized tasks.
      */
@@ -64,7 +64,7 @@ public class TaskList {
     }
 
     /**
-     * Deserialize a task from a serialized String back to a Task.
+     * Deserializes a task from a serialized String back to a Task.
      *
      * @param serializedTask Serialized task String to be deserialized.
      * @return The deserialized task.
