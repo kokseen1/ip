@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import isla.IslaException;
 
@@ -45,12 +46,9 @@ public class TaskList {
      * Returns an enumeration of the task list as a string.
      */
     public String getEnumeration() {
-        ArrayList<String> lines = new ArrayList<>();
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            lines.add(i + 1 + "." + task);
-        }
-        return String.join("\n", lines);
+        return IntStream.range(0, tasks.size())
+                .mapToObj(i -> (i + 1) + "." + tasks.get(i))
+                .collect(Collectors.joining("\n"));
     }
 
     /**
