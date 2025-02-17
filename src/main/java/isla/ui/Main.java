@@ -12,8 +12,6 @@ import javafx.stage.Stage;
  * A GUI for Isla using FXML.
  */
 public class Main extends Application {
-    private static final int WINDOW_HEIGHT = 220;
-    private static final int WINDOW_WIDTH = 220;
 
     private final Isla isla = new Isla();
 
@@ -21,6 +19,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+            stage.setTitle("Isla");
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
