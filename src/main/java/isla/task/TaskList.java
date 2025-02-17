@@ -39,7 +39,7 @@ public class TaskList {
      */
     public String getEnumeration() {
         return IntStream.range(0, tasks.size())
-                .mapToObj(i -> (i + 1) + "." + tasks.get(i))
+                .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                 .collect(Collectors.joining("\n"));
     }
 

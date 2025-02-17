@@ -176,7 +176,7 @@ public class Parser {
             task = tasks.getTask(idx);
             assert task != null;
             task.markAsNotDone();
-            return "OK, I've marked this task as not done yet:" + task;
+            return "OK, I've marked this task as not done yet: " + task;
 
         default:
             throw new IslaException("Unknown modify action: " + action);
