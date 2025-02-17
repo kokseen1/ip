@@ -52,7 +52,7 @@ public class Parser {
             return Ui.getFarewellMessage();
 
         case LIST:
-            return "Here are the tasks in your list:"
+            return "Here are the tasks in your list:\n"
                     + tasks.getEnumeration();
 
         case HELP:
