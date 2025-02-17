@@ -41,8 +41,8 @@ public class MainWindow extends AnchorPane {
     /**
      * Injects the Isla instance.
      */
-    public void setIsla(Isla d) {
-        isla = d;
+    public void setIsla(Isla isla) {
+        this.isla = isla;
     }
 
     /**
