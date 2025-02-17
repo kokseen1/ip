@@ -10,36 +10,23 @@ import java.util.stream.IntStream;
 import isla.IslaException;
 
 /**
- * TaskList class to represent a list of task objects.
+ * TaskList class to represent a list of Task objects.
  */
 public class TaskList {
-    private final ArrayList<Task> tasks;
+    private final List<Task> tasks;
 
+    /**
+     * Constructs a new empty TaskList.
+     */
     public TaskList() {
         tasks = new ArrayList<>();
     }
 
-    public TaskList(ArrayList<Task> tasks) {
-        this.tasks = tasks;
-    }
-
     /**
-     * Constructs a new TaskList with an existing List of serialized tasks.
-     * @throws IslaException If error is encountered when deserializing.
+     * Constructs a new TaskList from an array of tasks.
      */
-    public TaskList(List<String> serializedList) throws IslaException {
-        tasks = new ArrayList<>();
-        for (String serializedTask : serializedList) {
-            Task deserializedTask;
-
-            try {
-                deserializedTask = deserialize(serializedTask);
-            } catch (IslaException e) {
-                throw new IslaException("Error when deserializing task.");
-            }
-
-            tasks.add(deserializedTask);
-        }
+    public TaskList(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     /**
@@ -52,7 +39,7 @@ public class TaskList {
     }
 
     /**
-     * Serializes the tasks in the list to a String array suitable for saving to file.
+     * Serializes the tasks in the list to a string array suitable for saving to file.
      *
      * @return List of serialized tasks.
      */
@@ -63,13 +50,13 @@ public class TaskList {
     }
 
     /**
-     * Deserializes a task from a serialized String back to a Task.
+     * Deserializes a task from a serialized string back to a Task.
      *
-     * @param serializedTask Serialized task String to be deserialized.
+     * @param serializedTask Serialized task string to be deserialized.
      * @return The deserialized task.
      * @throws IslaException If error is encountered when deserializing.
      */
-    public Task deserialize(String serializedTask) throws IslaException {
+    public static Task deserialize(String serializedTask) throws IslaException {
         String[] taskComponents = serializedTask.split("\\|");
         String taskType = taskComponents[0];
         boolean isDone = Boolean.parseBoolean(taskComponents[1]);
@@ -110,6 +97,9 @@ public class TaskList {
         return newTask;
     }
 
+    /**
+     * Returns the task at the specified 1-based index.
+     */
     public Task getTask(Integer taskId) throws IslaException {
         try {
             return tasks.get(taskId - 1);
@@ -139,15 +129,18 @@ public class TaskList {
         return task;
     }
 
+    /**
+     * Returns the size of the task list.
+     */
     public Integer getSize() {
         return tasks.size();
     }
 
     /**
-     * Returns a TaskList with tasks matching the given keyword String.
+     * Returns a TaskList with tasks matching the given keyword.
      */
     public TaskList find(String keyword) {
-        return new TaskList((ArrayList<Task>) tasks.stream()
+        return new TaskList(tasks.stream()
                 .filter(task -> task.description.toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList()));
     }

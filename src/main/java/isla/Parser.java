@@ -36,12 +36,11 @@ public class Parser {
      *
      * @param command Command string input.
      * @param tasks Current TaskList object.
-     * @param ui Current Ui object.
      * @param storage Current Storage object.
      * @return The response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
-    public static String executeAndGetResponse(String command, TaskList tasks, Ui ui, Storage storage) throws
+    public static String executeAndGetResponse(String command, TaskList tasks, Storage storage) throws
             IslaException {
         String[] commandArray = command.split(" ");
         String[] parameters = Arrays.copyOfRange(commandArray, 1, commandArray.length);
@@ -49,17 +48,17 @@ public class Parser {
 
         switch (action) {
         case BYE:
-            return Ui.getFarewellMessage();
+            return Ui.FAREWELL_MESSAGE;
 
         case LIST:
             return "Here are the tasks in your list:\n"
                     + tasks.getEnumeration();
 
         case HELP:
-            return Ui.getHelpMessage();
+            return Ui.HELP_MESSAGE;
 
         default:
-            return executeParameterizedCommand(action, parameters, tasks, ui, storage);
+            return executeParameterizedCommand(action, parameters, tasks, storage);
         }
     }
 
@@ -210,13 +209,12 @@ public class Parser {
      *
      * @param parameters String array of whitespace-split command.
      * @param tasks Current TaskList object.
-     * @param ui Current Ui object.
      * @param storage Current Storage object.
      * @return The response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
     private static String executeParameterizedCommand(
-            Action action, String[] parameters, TaskList tasks, Ui ui, Storage storage) throws IslaException {
+            Action action, String[] parameters, TaskList tasks, Storage storage) throws IslaException {
         String response;
 
         switch (action) {

@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+
+import isla.task.Task;
+import isla.task.TaskList;
 
 /**
  * Storage class to handle saving and loading of tasks to disk.
@@ -17,21 +21,25 @@ public class Storage {
     }
 
     /**
-     * Reads the save file and returns the serialized task list.
+     * Loads the save file and returns the deserialized list of tasks.
      *
-     * @return List of serialized tasks.
+     * @return List of deserialized tasks.
      * @throws IslaException If IOException is encountered when reading.
      */
-    public List<String> load() throws IslaException {
+    public List<Task> load() throws IslaException {
         List<String> serializedTasks;
-
         try {
             serializedTasks = Files.readAllLines(savePath);
         } catch (IOException e) {
             throw new IslaException("Error when reading save file.");
         }
 
-        return serializedTasks;
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (String serializedTask : serializedTasks) {
+            tasks.add(TaskList.deserialize(serializedTask));
+        }
+
+        return tasks;
     }
 
     /**
@@ -44,7 +52,7 @@ public class Storage {
         try {
             Files.createDirectories(savePath.getParent());
             Files.write(savePath, serializedTasks);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IslaException("Error when saving.");
         }
     }

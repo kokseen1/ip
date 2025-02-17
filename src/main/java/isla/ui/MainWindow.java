@@ -32,7 +32,7 @@ public class MainWindow extends AnchorPane {
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         dialogContainer.getChildren().addAll(
-                DialogBox.getIslaDialog(Ui.getGreetingMessage(), islaImage)
+                DialogBox.getIslaDialog(Ui.GREETING_MESSAGE, islaImage)
         );
     }
 
@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         String response = isla.getResponse(input);
-        if (response.equals(Ui.getFarewellMessage())) {
+        if (response.equals(Ui.FAREWELL_MESSAGE)) {
             Platform.exit();
         }
         dialogContainer.getChildren().addAll(

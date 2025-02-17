@@ -12,19 +12,17 @@ public class Isla {
     private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
 
     private final Storage storage;
-    private final Ui ui;
     private TaskList tasks;
 
     /**
-     * Constructor to initialize the chatbot.
+     * Constructs and initializes the chatbot.
      */
     public Isla(String filePath) {
-        ui = new Ui();
         storage = new Storage(filePath);
         try {
             tasks = new TaskList(storage.load());
         } catch (IslaException e) {
-            ui.showLoadingError();
+            System.out.println("Could not load tasks: " + e.getMessage());
             tasks = new TaskList();
         }
     }
@@ -33,10 +31,13 @@ public class Isla {
         this(DEFAULT_FILE_PATH);
     }
 
+    /**
+     * Returns the response of the chatbot from processing the command.
+     */
     public String getResponse(String command) {
         String response;
         try {
-            response = Parser.executeAndGetResponse(command, tasks, ui, storage);
+            response = Parser.executeAndGetResponse(command, tasks, storage);
         } catch (IslaException e) {
             response = e.getMessage();
         }

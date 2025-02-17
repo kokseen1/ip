@@ -1,10 +1,10 @@
 package isla.ui;
 
 /**
- * Ui class to handle interactions with the user.
+ * Utility class to handle interactions with the user.
  */
 public class Ui {
-    private static final String HELP_MESSAGE = "Available Commands:\n"
+    public static final String HELP_MESSAGE = "Available Commands:\n"
             + "list : list all tasks.\n"
             + "help : show help message.\n"
             + "bye : exit the application.\n"
@@ -19,31 +19,13 @@ public class Ui {
             + "find [keyword] : search for a task with a matching description.\n";
 
     /**
-     * Returns the default greeting message of the chatbot.
+     * Default greeting message of the chatbot.
      */
-    public static String getGreetingMessage() {
-        return "Hello, I am Isla.\n"
-                + "What can I do for you?";
-    }
+    public static final String GREETING_MESSAGE = "Hello, I am Isla.\n"
+            + "What can I do for you?";
 
     /**
-     * Returns the default farewell message of the chatbot.
+     * Default farewell message of the chatbot.
      */
-    public static String getFarewellMessage() {
-        return "Bye. Hope to see you again.";
-    }
-
-    /**
-     * Returns the default farewell message of the chatbot.
-     */
-    public static String getHelpMessage() {
-        return HELP_MESSAGE;
-    }
-
-    /**
-     * Prints the loading error message.
-     */
-    public void showLoadingError() {
-        System.out.println("Could not load tasks from storage.");
-    }
+    public static final String FAREWELL_MESSAGE = "Bye. Hope to see you again.";
 }
