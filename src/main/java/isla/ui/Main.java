@@ -23,7 +23,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            fxmlLoader.<MainWindow>getController().setIsla(isla); // inject the Isla instance
+            fxmlLoader.<MainWindow>getController().setIsla(isla);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

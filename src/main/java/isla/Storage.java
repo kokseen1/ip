@@ -16,12 +16,15 @@ import isla.task.TaskList;
 public class Storage {
     private final Path savePath;
 
+    /**
+     * Constructs a new storage object with the given file path.
+     */
     public Storage(String filePath) {
         savePath = Paths.get(filePath);
     }
 
     /**
-     * Loads the save file and returns the deserialized list of tasks.
+     * Loads the save file and returns the list of deserialized tasks.
      *
      * @return List of deserialized tasks.
      * @throws IslaException If IOException is encountered when reading.
@@ -46,7 +49,7 @@ public class Storage {
      * Writes the given list of serialized tasks to the save file.
      *
      * @param serializedTasks List of serialized tasks to save.
-     * @throws IslaException If IOException is encountered when saving.
+     * @throws IslaException If exception is encountered when saving.
      */
     public void save(List<String> serializedTasks) throws IslaException {
         try {

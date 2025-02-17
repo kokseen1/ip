@@ -3,7 +3,7 @@ package isla.task;
 import isla.IslaException;
 
 /**
- * Class to represent a To-do task object.
+ * Class to represent a To-do task.
  */
 public class Todo extends Task {
     public Todo(String description) throws IslaException {

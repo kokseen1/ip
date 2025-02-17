@@ -39,6 +39,22 @@ public class DialogBox extends HBox {
     }
 
     /**
+     * Returns the user's dialog box.
+     */
+    public static DialogBox getUserDialog(String text, Image img) {
+        return new DialogBox(text, img);
+    }
+
+    /**
+     * Returns the chatbot's dialog box.
+     */
+    public static DialogBox getIslaDialog(String text, Image img) {
+        var db = new DialogBox(text, img);
+        db.flip();
+        return db;
+    }
+
+    /**
      * Flips the dialog box such that the ImageView is on the left and text on the right.
      */
     private void flip() {
@@ -46,15 +62,5 @@ public class DialogBox extends HBox {
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
-    }
-
-    public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
-    }
-
-    public static DialogBox getIslaDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
-        db.flip();
-        return db;
     }
 }

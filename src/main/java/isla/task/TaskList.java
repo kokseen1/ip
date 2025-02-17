@@ -18,6 +18,7 @@ public class TaskList {
         DEADLINE,
         EVENT;
     }
+
     private final List<Task> tasks;
 
     /**
@@ -28,32 +29,19 @@ public class TaskList {
     }
 
     /**
-     * Constructs a new TaskList from an array of tasks.
+     * Constructs a new TaskList from an existing array of tasks.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = tasks;
     }
 
     /**
-     * Returns an enumeration of the task list as a string.
+     * Returns an enumeration of the task list as a newline-separated string.
      */
     public String getEnumeration() {
         return IntStream.range(0, tasks.size())
                 .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                 .collect(Collectors.joining("\n"));
-    }
-
-    private static TaskType getTaskType(String taskTypeString) throws IslaException {
-        switch (taskTypeString) {
-        case "T":
-            return TaskType.TODO;
-        case "D":
-            return TaskType.DEADLINE;
-        case "E":
-            return TaskType.EVENT;
-        default:
-            throw new IslaException("Invalid task type: " + taskTypeString);
-        }
     }
 
     /**
@@ -65,44 +53,6 @@ public class TaskList {
         return tasks.stream()
                 .map(Task::serialize)
                 .toList();
-    }
-
-    private static Task makeTask(String[] taskComponents) throws IslaException {
-        TaskType taskType = getTaskType(taskComponents[0]);
-        boolean isDone = Boolean.parseBoolean(taskComponents[1]);
-        String description = taskComponents[2];
-        Task task;
-
-        switch (taskType) {
-        case TODO:
-            task = new Todo(description);
-            break;
-
-        case DEADLINE:
-            LocalDate by;
-            String byString = taskComponents[3];
-            try {
-                by = LocalDate.parse(byString);
-            } catch (DateTimeParseException e) {
-                throw new IslaException("Invalid date format in save file.");
-            }
-            task = new Deadline(description, by);
-            break;
-
-        case EVENT:
-            String from = taskComponents[3];
-            String to = taskComponents[4];
-            task = new Event(description, from, to);
-            break;
-
-        default:
-            throw new IslaException("Invalid task type: " + taskType);
-        }
-
-        if (isDone) {
-            task.markAsDone();
-        }
-        return task;
     }
 
     /**
@@ -161,11 +111,62 @@ public class TaskList {
     }
 
     /**
-     * Returns a TaskList with tasks matching the given keyword.
+     * Returns a TaskList of tasks matching the given keyword.
      */
     public TaskList find(String keyword) {
         return new TaskList(tasks.stream()
                 .filter(task -> task.description.toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList()));
+    }
+
+    private static TaskType getTaskType(String taskTypeString) throws IslaException {
+        switch (taskTypeString) {
+        case "T":
+            return TaskType.TODO;
+        case "D":
+            return TaskType.DEADLINE;
+        case "E":
+            return TaskType.EVENT;
+        default:
+            throw new IslaException("Invalid task type: " + taskTypeString);
+        }
+    }
+
+    private static Task makeTask(String[] taskComponents) throws IslaException {
+        TaskType taskType = getTaskType(taskComponents[0]);
+        boolean isDone = Boolean.parseBoolean(taskComponents[1]);
+        String description = taskComponents[2];
+        Task task;
+
+        switch (taskType) {
+        case TODO:
+            task = new Todo(description);
+            break;
+
+        case DEADLINE:
+            LocalDate by;
+            String byString = taskComponents[3];
+            try {
+                by = LocalDate.parse(byString);
+            } catch (DateTimeParseException e) {
+                throw new IslaException("Invalid date format in save file.");
+            }
+            task = new Deadline(description, by);
+            break;
+
+        case EVENT:
+            String from = taskComponents[3];
+            String to = taskComponents[4];
+            task = new Event(description, from, to);
+            break;
+
+        default:
+            throw new IslaException("Invalid task type: " + taskType);
+        }
+
+        if (isDone) {
+            task.markAsDone();
+        }
+        return task;
     }
 }

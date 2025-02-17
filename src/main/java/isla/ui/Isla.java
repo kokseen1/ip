@@ -28,6 +28,9 @@ public class Isla {
         }
     }
 
+    /**
+     * Constructs the chatbot with the default path.
+     */
     public Isla() {
         this(DEFAULT_FILE_PATH);
     }

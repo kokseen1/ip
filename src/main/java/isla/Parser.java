@@ -15,7 +15,6 @@ import isla.ui.Ui;
  * Parser class to handle parsing and execution of user commands.
  */
 public class Parser {
-
     private enum Action {
         BYE,
         LIST,
@@ -37,7 +36,7 @@ public class Parser {
      * @param command Command string input.
      * @param tasks Current TaskList object.
      * @param storage Current Storage object.
-     * @return The response message from executing the action.
+     * @return Response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
     public static String executeAndGetResponse(String command, TaskList tasks, Storage storage) throws
@@ -58,25 +57,66 @@ public class Parser {
             return Ui.HELP_MESSAGE;
 
         default:
-            return executeParameterizedCommand(action, parameters, tasks, storage);
+            return executeAdvancedAction(action, parameters, tasks, storage);
         }
     }
 
     /**
-     * Returns a slice of the command array in the specified range, joined by whitespace.
+     * Executes advanced actions with multiple parameters, and returns the response.
      *
-     * @param commandArray String array of whitespace-split command.
-     * @param from Starting index.
-     * @param to Final index.
-     * @return The specified slice of the command.
+     * @param action Action specified by the command.
+     * @param parameters String array of command parameters.
+     * @param tasks Current TaskList object.
+     * @param storage Current Storage object.
+     * @return Response message from executing the action.
+     * @throws IslaException If error is encountered when processing the command.
      */
+    private static String executeAdvancedAction(
+            Action action, String[] parameters, TaskList tasks, Storage storage) throws IslaException {
+        String response;
+
+        switch (action) {
+        case TODO:
+        case DEADLINE:
+        case EVENT: {
+            response = addTask(action, parameters, tasks);
+            break;
+        }
+
+        case DELETE:
+        case MARK:
+        case UNMARK: {
+            int targetIdx;
+            try {
+                targetIdx = Integer.parseInt(parameters[0]);
+            } catch (RuntimeException e) {
+                throw new IslaException("Invalid index specified.");
+            }
+            response = modifyTask(action, targetIdx, tasks);
+            break;
+        }
+
+        case FIND: {
+            String keyword = getSubCommand(parameters, 0, parameters.length);
+            response = findTask(keyword, tasks);
+            break;
+        }
+
+        default:
+            throw new IslaException("Unknown action.");
+        }
+
+        saveTasks(storage, tasks);
+        return response;
+    }
+
     private static String getSubCommand(String[] commandArray, int from, int to) {
         return String.join(" ", Arrays.copyOfRange(commandArray, from, to));
     }
 
     private static Task makeTask(Action action, String[] parameters) throws IslaException {
         String description;
-        Task task = null;
+        Task task;
 
         switch (action) {
         case TODO:
@@ -202,53 +242,5 @@ public class Parser {
 
     private static void saveTasks(Storage storage, TaskList tasks) throws IslaException {
         storage.save(tasks.serialize());
-    }
-
-    /**
-     * Executes advanced commands with multiple parameters, and returns the response.
-     *
-     * @param parameters String array of whitespace-split command.
-     * @param tasks Current TaskList object.
-     * @param storage Current Storage object.
-     * @return The response message from executing the action.
-     * @throws IslaException If error is encountered when processing the command.
-     */
-    private static String executeParameterizedCommand(
-            Action action, String[] parameters, TaskList tasks, Storage storage) throws IslaException {
-        String response;
-
-        switch (action) {
-        case TODO:
-        case DEADLINE:
-        case EVENT: {
-            response = addTask(action, parameters, tasks);
-            break;
-        }
-
-        case DELETE:
-        case MARK:
-        case UNMARK: {
-            int targetIdx;
-            try {
-                targetIdx = Integer.parseInt(parameters[0]);
-            } catch (RuntimeException e) {
-                throw new IslaException("Invalid index specified.");
-            }
-            response = modifyTask(action, targetIdx, tasks);
-            break;
-        }
-
-        case FIND: {
-            String keyword = getSubCommand(parameters, 0, parameters.length);
-            response = findTask(keyword, tasks);
-            break;
-        }
-
-        default:
-            throw new IslaException("Unknown action.");
-        }
-
-        saveTasks(storage, tasks);
-        return response;
     }
 }

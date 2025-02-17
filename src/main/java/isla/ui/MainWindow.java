@@ -27,7 +27,9 @@ public class MainWindow extends AnchorPane {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image islaImage = new Image(this.getClass().getResourceAsStream("/images/DaIsla.png"));
 
-    /** Initializes the Chatbot GUI */
+    /**
+     * Initializes the Chatbot GUI.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
@@ -36,14 +38,17 @@ public class MainWindow extends AnchorPane {
         );
     }
 
-    /** Injects the Isla instance */
+    /**
+     * Injects the Isla instance.
+     */
     public void setIsla(Isla d) {
         isla = d;
     }
 
     /**
      * Creates two dialog boxes, one echoing user input and the other containing Isla's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * the dialog container.
+     * Clears the user input after processing.
      */
     @FXML
     private void handleUserInput() {

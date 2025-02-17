@@ -44,7 +44,7 @@ public abstract class Task {
     }
 
     /**
-     * Returns the serialized task as a String.
+     * Returns the task as a serialized string.
      */
     public String serialize() {
         return this.isDone + "|" + this.description;
