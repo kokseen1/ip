@@ -1,8 +1,3 @@
----
-layout: page
-title: User Guide
----
-
 # Isla User Guide
 
 ![Ui](Ui.png)
@@ -10,9 +5,6 @@ title: User Guide
 Welcome to Isla, your personal task management assistant.
 Inspired by the anime Plastic Memories, Isla is designed to help you efficiently manage your tasks with a simple and intuitive command-line interface.
 Whether you need to keep track of deadlines, schedule events, or organize your to-do list, Isla is here to assist you every step of the way.
-
-* Table of Contents
-  {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
