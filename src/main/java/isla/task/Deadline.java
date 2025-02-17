@@ -3,6 +3,8 @@ package isla.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import isla.IslaException;
+
 /**
  * Deadline class to represent a deadline task.
  */
@@ -12,7 +14,7 @@ public class Deadline extends Task {
     /**
      * Constructs a new Deadline object with a description and `by` field.
      */
-    public Deadline(String description, LocalDate by) {
+    public Deadline(String description, LocalDate by) throws IslaException {
         super(description);
         this.by = by;
     }

@@ -16,196 +16,241 @@ import isla.ui.Ui;
  */
 public class Parser {
 
+    private enum Action {
+        BYE,
+        LIST,
+        HELP,
+
+        TODO,
+        DEADLINE,
+        EVENT,
+
+        DELETE,
+        MARK,
+        UNMARK,
+        FIND,
+    }
+
     /**
-     * Parses a given command and executes the desired action.
+     * Parses a given command and executes the desired action, and returns the response.
      *
-     * @param command Command string input
-     * @param tasks Current TaskList object
-     * @param ui Current Ui object
-     * @param storage Current Storage object
+     * @param command Command string input.
+     * @param tasks Current TaskList object.
+     * @param ui Current Ui object.
+     * @param storage Current Storage object.
      * @return The response message from executing the action.
      * @throws IslaException If error is encountered when processing the command.
      */
     public static String executeAndGetResponse(String command, TaskList tasks, Ui ui, Storage storage) throws
             IslaException {
         String[] commandArray = command.split(" ");
-        String action = commandArray[0];
+        String[] parameters = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+        Action action = getAction(commandArray[0]);
+
         switch (action) {
-        case "bye":
+        case BYE:
             return Ui.getFarewellMessage();
 
-        case "list":
-            return tasks.enumerate();
+        case LIST:
+            return "Here are the tasks in your list:"
+                    + tasks.getEnumeration();
 
-        case "help":
+        case HELP:
             return Ui.getHelpMessage();
 
         default:
-            return handleParameterizedCommand(commandArray, tasks, ui, storage);
+            return executeParameterizedCommand(action, parameters, tasks, ui, storage);
         }
     }
 
     /**
-     * Handles advanced commands with multiple parameters.
+     * Returns a slice of the command array in the specified range, joined by whitespace.
      *
      * @param commandArray String array of whitespace-split command.
-     * @param tasks Current TaskList object
-     * @param ui Current Ui object
-     * @param storage Current Storage object
-     * @return The response message from executing the action.
-     * @throws IslaException If error is encountered when processing the command.
+     * @param from Starting index.
+     * @param to Final index.
+     * @return The specified slice of the command.
      */
-    private static String handleParameterizedCommand(String[] commandArray, TaskList tasks, Ui ui, Storage storage)
-            throws IslaException {
-        String action = commandArray[0];
-        assert !action.isEmpty();
-        String response;
+    private static String getSubCommand(String[] commandArray, int from, int to) {
+        return String.join(" ", Arrays.copyOfRange(commandArray, from, to));
+    }
+
+    private static Task makeTask(Action action, String[] parameters) throws IslaException {
+        String description;
+        Task task = null;
 
         switch (action) {
-        case "todo": {
-            String description = String.join(" ", Arrays.copyOfRange(commandArray,
-                    1, commandArray.length));
+        case TODO:
+            description = getSubCommand(parameters, 0, parameters.length);
+            task = new Todo(description);
+            return task;
 
-            if (description.isEmpty()) {
-                throw new IslaException("Description cannot be empty.");
-            }
-
-            response = tasks.addTask(new Todo(description));
-            break;
-        }
-
-        case "deadline": {
-            int byIndex = Arrays.asList(commandArray).indexOf("/by");
+        case DEADLINE:
+            int byIndex = Arrays.asList(parameters).indexOf("/by");
             if (byIndex == -1) {
                 throw new IslaException("Must specify /by.");
             }
 
-            String description = String.join(" ", Arrays.copyOfRange(commandArray,
-                    1, byIndex));
-            if (description.isEmpty()) {
-                throw new IslaException("Description cannot be empty.");
-            }
-
-            String byString = String.join(" ", Arrays.copyOfRange(commandArray,
-                    byIndex + 1, commandArray.length));
-            if (byString.isEmpty()) {
-                throw new IslaException("Due by date cannot be empty.");
-            }
-
+            description = getSubCommand(parameters, 0, byIndex);
+            String byString = getSubCommand(parameters, byIndex + 1, parameters.length);
             LocalDate by;
+
             try {
                 by = LocalDate.parse(byString);
             } catch (DateTimeParseException e) {
                 throw new IslaException("Could not parse date. Ensure date is in correct format: YYYY-MM-DD.");
             }
 
-            response = tasks.addTask(new Deadline(description, by));
-            break;
-        }
+            task = new Deadline(description, by);
+            return task;
 
-        case "event": {
-            int fromIndex = Arrays.asList(commandArray).indexOf("/from");
+        case EVENT:
+            int fromIndex = Arrays.asList(parameters).indexOf("/from");
             if (fromIndex == -1) {
                 throw new IslaException("Must specify /from.");
             }
 
-            int toIndex = Arrays.asList(commandArray).indexOf("/to");
+            int toIndex = Arrays.asList(parameters).indexOf("/to");
             if (toIndex == -1) {
                 throw new IslaException("Must specify /to.");
             }
 
-            String description = String.join(" ", Arrays.copyOfRange(commandArray,
-                    1, fromIndex));
-            if (description.isEmpty()) {
-                throw new IslaException("Description cannot be empty.");
+            if (fromIndex >= toIndex) {
+                throw new IslaException("/from must be specified before /to.");
             }
 
-            String from = String.join(" ", Arrays.copyOfRange(commandArray,
-                    fromIndex + 1, toIndex));
-            if (from.isEmpty()) {
-                throw new IslaException("From date cannot be empty.");
-            }
+            description = getSubCommand(parameters, 0, fromIndex);
+            String from = getSubCommand(parameters, fromIndex + 1, toIndex);
+            String to = getSubCommand(parameters, toIndex + 1, parameters.length);
 
-            String to = String.join(" ", Arrays.copyOfRange(commandArray,
-                    toIndex + 1, commandArray.length));
-            if (to.isEmpty()) {
-                throw new IslaException("To date cannot be empty.");
-            }
+            task = new Event(description, from, to);
+            return task;
 
-            response = tasks.addTask(new Event(description, from, to));
-            break;
+        default:
+            throw new IslaException("Unknown Task type: " + action);
         }
+    }
 
-        case "delete": {
-            Task task;
+    private static Action getAction(String actionString) throws IslaException {
+        switch (actionString) {
+        case "bye":
+            return Action.BYE;
+        case "list":
+            return Action.LIST;
+        case "help":
+            return Action.HELP;
+        case "todo":
+            return Action.TODO;
+        case "deadline":
+            return Action.DEADLINE;
+        case "event":
+            return Action.EVENT;
+        case "delete":
+            return Action.DELETE;
+        case "mark":
+            return Action.MARK;
+        case "unmark":
+            return Action.UNMARK;
+        case "find":
+            return Action.FIND;
+        default:
+            throw new IslaException("Unknown action: " + actionString);
+        }
+    }
 
-            try {
-                task = tasks.deleteTask(Integer.parseInt(commandArray[1]));
-            } catch (IndexOutOfBoundsException e) {
-                throw new IslaException("Target index is out of bounds.");
-            } catch (NumberFormatException e) {
-                throw new IslaException("Target index must be a number.");
-            }
+    private static String modifyTask(Action action, int idx, TaskList tasks) throws IslaException {
+        Task task;
 
+        switch (action) {
+        case DELETE:
+            task = tasks.deleteTask(idx);
             assert task != null;
-            response = "Removed: " + task;
-            break;
-        }
+            return "Removed: " + task;
 
-        case "mark": {
-            Task task;
-
-            try {
-                task = tasks.getTask(Integer.parseInt(commandArray[1]));
-            } catch (IndexOutOfBoundsException e) {
-                throw new IslaException("Target index is out of bounds.");
-            } catch (NumberFormatException e) {
-                throw new IslaException("Target index must be a number.");
-            }
-
+        case MARK:
+            task = tasks.getTask(idx);
             assert task != null;
             task.markAsDone();
+            return "Nice! I've marked this task as done:" + task;
 
-            response = "Nice! I've marked this task as done:" + task;
+        case UNMARK:
+            task = tasks.getTask(idx);
+            assert task != null;
+            task.markAsNotDone();
+            return "OK, I've marked this task as not done yet:" + task;
+
+        default:
+            throw new IslaException("Unknown modify action: " + action);
+        }
+    }
+
+    private static String findTask(String keyword, TaskList tasks) throws IslaException {
+        if (keyword.isEmpty()) {
+            throw new IslaException("Keyword cannot be empty.");
+        }
+        return "Search results for '" + keyword + "' :\n"
+                + tasks.find(keyword).getEnumeration();
+    }
+
+    private static String addTask(Action action, String[] parameters, TaskList tasks) throws IslaException {
+        Task task = makeTask(action, parameters);
+        tasks.addTask(task);
+        return "Got it. I've added this task:\n"
+                + task
+                + "\n"
+                + "Now you have " + tasks.getSize() + " task(s) in the list.";
+    }
+
+    private static void saveTasks(Storage storage, TaskList tasks) throws IslaException {
+        storage.save(tasks.serialize());
+    }
+
+    /**
+     * Executes advanced commands with multiple parameters, and returns the response.
+     *
+     * @param parameters String array of whitespace-split command.
+     * @param tasks Current TaskList object.
+     * @param ui Current Ui object.
+     * @param storage Current Storage object.
+     * @return The response message from executing the action.
+     * @throws IslaException If error is encountered when processing the command.
+     */
+    private static String executeParameterizedCommand(
+            Action action, String[] parameters, TaskList tasks, Ui ui, Storage storage) throws IslaException {
+        String response;
+
+        switch (action) {
+        case TODO:
+        case DEADLINE:
+        case EVENT: {
+            response = addTask(action, parameters, tasks);
             break;
         }
 
-        case "unmark": {
-            Task task;
-
+        case DELETE:
+        case MARK:
+        case UNMARK: {
+            int targetIdx;
             try {
-                task = tasks.getTask(Integer.parseInt(commandArray[1]));
-            } catch (IndexOutOfBoundsException e) {
-                throw new IslaException("Target index is out of bounds.");
+                targetIdx = Integer.parseInt(parameters[0]);
             } catch (NumberFormatException e) {
                 throw new IslaException("Target index must be a number.");
             }
-
-            assert task != null;
-            task.markAsNotDone();
-
-            response = "OK, I've marked this task as not done yet:" + task;
+            response = modifyTask(action, targetIdx, tasks);
             break;
         }
 
-        case "find": {
-            String keyword = String.join(" ", Arrays.copyOfRange(commandArray,
-                    1, commandArray.length));
-
-            if (keyword.isEmpty()) {
-                throw new IslaException("Keyword cannot be empty.");
-            }
-
-            response = tasks.find(keyword).enumerate();
+        case FIND: {
+            String keyword = getSubCommand(parameters, 0, parameters.length);
+            response = findTask(keyword, tasks);
             break;
         }
 
         default:
-            throw new IslaException("Unknown command.");
+            throw new IslaException("Unknown action.");
         }
 
-        storage.save(tasks.serialize());
-        assert response != null;
+        saveTasks(storage, tasks);
         return response;
     }
 }

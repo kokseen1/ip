@@ -42,11 +42,10 @@ public class TaskList {
     }
 
     /**
-     * Enumerates and prints all the tasks in the list.
+     * Returns an enumeration of the task list as a string.
      */
-    public String enumerate() {
+    public String getEnumeration() {
         ArrayList<String> lines = new ArrayList<>();
-        lines.add("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             lines.add(i + 1 + "." + task);
@@ -60,7 +59,9 @@ public class TaskList {
      * @return List of serialized tasks.
      */
     public List<String> serialize() {
-        return tasks.stream().map(Task::serialize).toList();
+        return tasks.stream()
+                .map(Task::serialize)
+                .toList();
     }
 
     /**
@@ -111,28 +112,32 @@ public class TaskList {
         return newTask;
     }
 
-    public Task getTask(Integer taskId) {
-        return tasks.get(taskId - 1);
+    public Task getTask(Integer taskId) throws IslaException {
+        try {
+            return tasks.get(taskId - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IslaException("Target index out of bounds.");
+        }
     }
 
     /**
      * Adds a new task to the task list.
      */
-    public String addTask(Task task) {
-        ArrayList<String> lines = new ArrayList<>();
+    public void addTask(Task task) {
         tasks.add(task);
-        lines.add("Got it. I've added this task:");
-        lines.add(String.valueOf(task));
-        lines.add("Now you have " + this.getSize() + " task(s) in the list.");
-        return String.join("\n", lines);
     }
 
     /**
      * Deletes the task at the given index.
      */
-    public Task deleteTask(Integer taskId) {
-        Task task = tasks.get(taskId - 1);
-        tasks.remove(taskId - 1);
+    public Task deleteTask(Integer taskId) throws IslaException {
+        Task task;
+        try {
+            task = tasks.get(taskId - 1);
+            tasks.remove(taskId - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IslaException("Target index is out of bounds.");
+        }
         return task;
     }
 

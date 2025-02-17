@@ -1,5 +1,7 @@
 package isla.task;
 
+import isla.IslaException;
+
 /**
  * Task class to represent an abstract task.
  */
@@ -10,7 +12,10 @@ public abstract class Task {
     /**
      * Constructs a new Task with the given description.
      */
-    public Task(String description) {
+    public Task(String description) throws IslaException {
+        if (description.isEmpty()) {
+            throw new IslaException("Description cannot be empty.");
+        }
         this.description = description;
         this.isDone = false;
     }
