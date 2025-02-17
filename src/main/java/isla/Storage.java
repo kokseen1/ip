@@ -46,15 +46,15 @@ public class Storage {
     }
 
     /**
-     * Writes the given list of serialized tasks to the save file.
+     * Writes the given TaskList to the save file.
      *
-     * @param serializedTasks List of serialized tasks to save.
+     * @param tasks TaskList to save.
      * @throws IslaException If exception is encountered when saving.
      */
-    public void save(List<String> serializedTasks) throws IslaException {
+    public void save(TaskList tasks) throws IslaException {
         try {
             Files.createDirectories(savePath.getParent());
-            Files.write(savePath, serializedTasks);
+            Files.write(savePath, tasks.serialize());
         } catch (Exception e) {
             throw new IslaException("Error when saving.");
         }

@@ -241,6 +241,6 @@ public class Parser {
     }
 
     private static void saveTasks(Storage storage, TaskList tasks) throws IslaException {
-        storage.save(tasks.serialize());
+        storage.save(tasks);
     }
 }
