@@ -28,9 +28,10 @@ public class Ui {
     /**
      * Prints the default greeting message of the chatbot.
      */
-    public void showGreetingMessage() {
-        System.out.println("Hello, I am isla.ui.Isla.");
-        System.out.println("What can I do for you?");
+    public static String getGreetingMessage() {
+        return "Hello, I am Isla.\n"
+                + "What can I do for you?\n"
+                + HELP_MESSAGE;
     }
 
     /**

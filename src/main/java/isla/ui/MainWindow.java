@@ -26,9 +26,13 @@ public class MainWindow extends AnchorPane {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image islaImage = new Image(this.getClass().getResourceAsStream("/images/DaIsla.png"));
 
+    /** Initializes the Chatbot GUI */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().addAll(
+                DialogBox.getIslaDialog(Ui.getGreetingMessage(), islaImage)
+        );
     }
 
     /** Injects the Isla instance */
