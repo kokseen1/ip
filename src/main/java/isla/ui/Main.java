@@ -24,9 +24,6 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            stage.setMinHeight(WINDOW_HEIGHT);
-            stage.setMinWidth(WINDOW_WIDTH);
-            stage.setMaxWidth(WINDOW_WIDTH);
             fxmlLoader.<MainWindow>getController().setIsla(isla); // inject the Isla instance
             stage.show();
         } catch (IOException e) {
