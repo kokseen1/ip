@@ -23,6 +23,7 @@ public class Isla {
             tasks = new TaskList(storage.load());
         } catch (IslaException e) {
             System.out.println("Could not load tasks: " + e.getMessage());
+            System.out.println("Creating new task list...");
             tasks = new TaskList();
         }
     }

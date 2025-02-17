@@ -13,6 +13,11 @@ import isla.IslaException;
  * TaskList class to represent a list of Task objects.
  */
 public class TaskList {
+    private enum TaskType {
+        TODO,
+        DEADLINE,
+        EVENT;
+    }
     private final List<Task> tasks;
 
     /**
@@ -38,6 +43,19 @@ public class TaskList {
                 .collect(Collectors.joining("\n"));
     }
 
+    private static TaskType getTaskType(String taskTypeString) throws IslaException {
+        switch (taskTypeString) {
+        case "T":
+            return TaskType.TODO;
+        case "D":
+            return TaskType.DEADLINE;
+        case "E":
+            return TaskType.EVENT;
+        default:
+            throw new IslaException("Invalid task type: " + taskTypeString);
+        }
+    }
+
     /**
      * Serializes the tasks in the list to a string array suitable for saving to file.
      *
@@ -49,6 +67,44 @@ public class TaskList {
                 .toList();
     }
 
+    private static Task makeTask(String[] taskComponents) throws IslaException {
+        TaskType taskType = getTaskType(taskComponents[0]);
+        boolean isDone = Boolean.parseBoolean(taskComponents[1]);
+        String description = taskComponents[2];
+        Task task;
+
+        switch (taskType) {
+        case TODO:
+            task = new Todo(description);
+            break;
+
+        case DEADLINE:
+            LocalDate by;
+            String byString = taskComponents[3];
+            try {
+                by = LocalDate.parse(byString);
+            } catch (DateTimeParseException e) {
+                throw new IslaException("Invalid date format in save file.");
+            }
+            task = new Deadline(description, by);
+            break;
+
+        case EVENT:
+            String from = taskComponents[3];
+            String to = taskComponents[4];
+            task = new Event(description, from, to);
+            break;
+
+        default:
+            throw new IslaException("Invalid task type: " + taskType);
+        }
+
+        if (isDone) {
+            task.markAsDone();
+        }
+        return task;
+    }
+
     /**
      * Deserializes a task from a serialized string back to a Task.
      *
@@ -57,44 +113,12 @@ public class TaskList {
      * @throws IslaException If error is encountered when deserializing.
      */
     public static Task deserialize(String serializedTask) throws IslaException {
-        String[] taskComponents = serializedTask.split("\\|");
-        String taskType = taskComponents[0];
-        boolean isDone = Boolean.parseBoolean(taskComponents[1]);
-        String description = taskComponents[2];
-
-        Task newTask;
-
-        switch (taskType) {
-        case "T":
-            newTask = new Todo(description);
-            break;
-
-        case "D":
-            LocalDate by;
-            String byString = taskComponents[3];
-            try {
-                by = LocalDate.parse(byString);
-            } catch (DateTimeParseException e) {
-                throw new IslaException("Invalid date format.");
-            }
-            newTask = new Deadline(description, by);
-            break;
-
-        case "E":
-            String from = taskComponents[3];
-            String to = taskComponents[4];
-            newTask = new Event(description, from, to);
-            break;
-
-        default:
-            throw new IslaException("Invalid task type: " + taskType);
+        try {
+            String[] taskComponents = serializedTask.split("\\|");
+            return makeTask(taskComponents);
+        } catch (RuntimeException e) {
+            throw new IslaException("Corrupted task: " + serializedTask);
         }
-
-        if (isDone) {
-            newTask.markAsDone();
-        }
-
-        return newTask;
     }
 
     /**
