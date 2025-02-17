@@ -39,14 +39,14 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Returns the user's dialog box.
+     * Returns the user's dialog box with specified text and image.
      */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
     /**
-     * Returns the chatbot's dialog box.
+     * Returns the chatbot's dialog box with specified text and image.
      */
     public static DialogBox getIslaDialog(String text, Image img) {
         var db = new DialogBox(text, img);

@@ -15,7 +15,7 @@ public class Isla {
     private TaskList tasks;
 
     /**
-     * Constructs and initializes the chatbot.
+     * Constructs and initializes the chatbot with a file path.
      */
     public Isla(String filePath) {
         storage = new Storage(filePath);
