@@ -35,7 +35,7 @@ public class TaskListTest {
             TaskList.deserialize("D|false|test|2025-13-12");
             fail();
         } catch (Exception e) {
-            assertEquals("Invalid date format.", e.getMessage());
+            assertEquals("Invalid date format in save file.", e.getMessage());
         }
 
         try {
