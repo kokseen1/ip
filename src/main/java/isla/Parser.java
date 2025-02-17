@@ -96,7 +96,7 @@ public class Parser {
             try {
                 by = LocalDate.parse(byString);
             } catch (DateTimeParseException e) {
-                throw new IslaException("Could not parse date.");
+                throw new IslaException("Could not parse date. Ensure date is in correct format: YYYY-MM-DD.");
             }
 
             response = tasks.addTask(new Deadline(description, by));

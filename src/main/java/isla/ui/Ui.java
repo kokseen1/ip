@@ -12,7 +12,7 @@ public class Ui {
                                                + "bye : exit the application.\n"
                                                + "\n"
                                                + "todo [desc] : create a Todo with a description.\n"
-                                               + "deadline [desc] /by [when] : create a Deadline with a description and a deadline.\n"
+                                               + "deadline [desc] /by [YYYY-MM-DD] : create a Deadline with a description and a deadline.\n"
                                                + "event [desc] /from [date] /to [date] : create an Event with a description and a date range.\n"
                                                + "\n"
                                                + "mark [task no.] : mark a Task as completed.\n"
