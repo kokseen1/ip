@@ -231,8 +231,8 @@ public class Parser {
             int targetIdx;
             try {
                 targetIdx = Integer.parseInt(parameters[0]);
-            } catch (NumberFormatException e) {
-                throw new IslaException("Target index must be a number.");
+            } catch (RuntimeException e) {
+                throw new IslaException("Invalid index specified.");
             }
             response = modifyTask(action, targetIdx, tasks);
             break;
